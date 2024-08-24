@@ -3,13 +3,14 @@ import {
   ResizablePanel,
   ResizablePanelGroup
 } from "../ui/resizable";
+import { Editor } from "./editor";
 
 export const Playground = () => {
   return (
     <div className="flex playground">
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel>
-          <div>Editor</div>
+          <Editor />
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel>
