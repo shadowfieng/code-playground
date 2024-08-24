@@ -67,3 +67,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .playground {
+    height: calc(100dvh - 74px); /* 74px is header height */
+  }
+}
