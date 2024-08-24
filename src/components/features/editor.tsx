@@ -1,8 +1,17 @@
-import MonacoEditor from "@monaco-editor/react";
-import { useState } from "react";
+import MonacoEditor, { OnMount } from "@monaco-editor/react";
+import { usePlaygroundContext } from "@/context/playground-context";
 
 export const Editor = () => {
-  const [value, setValue] = useState('')
+  const { setEditorInstance } = usePlaygroundContext();
 
-  return <MonacoEditor height="90vh" defaultLanguage="javascript" defaultValue="// some comment"/>;
+  const handleEditorMount: OnMount = (editor) => setEditorInstance(editor);
+
+  return (
+    <MonacoEditor
+      height="90vh"
+      defaultLanguage="javascript"
+      defaultValue="// some comment"
+      onMount={handleEditorMount}
+    />
+  );
 };
