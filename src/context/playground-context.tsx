@@ -1,5 +1,7 @@
+import { createReadonlyProxyObject } from "@/lib";
 import { OnMount } from "@monaco-editor/react";
 import {
+  ContextType,
   createContext,
   MutableRefObject,
   PropsWithChildren,
@@ -8,11 +10,13 @@ import {
   useRef
 } from "react";
 
-type EditorInstance = Pick<Parameters<OnMount>[0], "getValue">;
+type IEditor = Parameters<OnMount>[0];
+type EditorInstance = Pick<IEditor, "getValue">;
+type EditorContextValue = ContextType<typeof PlaygroundContext>;
 
 const PlaygroundContext = createContext<{
   editorInstance: Readonly<MutableRefObject<EditorInstance | null>>;
-  setEditorInstance: (instance: EditorInstance) => void;
+  setEditorInstance: (instance: IEditor) => void;
 } | null>(null);
 const usePlaygroundContext = () => {
   const context = useContext(PlaygroundContext);
@@ -28,10 +32,10 @@ const usePlaygroundContext = () => {
 const PlaygroundProvider = ({ children }: PropsWithChildren) => {
   const editorInstanceRef = useRef<EditorInstance | null>(null);
 
-  const value = useMemo(() => {
+  const value = useMemo<EditorContextValue>(() => {
     return {
-      editorInstance: editorInstanceRef,
-      setEditorInstance(instance: EditorInstance) {
+      editorInstance: createReadonlyProxyObject(editorInstanceRef),
+      setEditorInstance(instance) {
         editorInstanceRef.current = {
           getValue: () => instance.getValue()
         };
